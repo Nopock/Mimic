@@ -1,0 +1,124 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.7.21"
+    id "org.jetbrains.kotlin.kapt" version "1.7.21"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.google.protobuf" version "0.9.1" apply false
+    id 'java'
+}
+
+allprojects {
+    group "org.hyrical.mimic"
+    version "1.0"
+
+    repositories {
+        mavenCentral()
+
+        maven { url 'https://jitpack.io' }
+
+        maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven { url "https://repo.dmulloy2.net/repository/public/" }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+
+        maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    }
+}
+
+subprojects {
+    apply plugin: "maven-publish"
+    apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: "org.jetbrains.kotlin.kapt"
+    apply plugin: "com.github.johnrengelman.shadow"
+    apply plugin: "com.google.protobuf"
+    apply plugin: "idea"
+    apply plugin: "java"
+
+    def globalDependencies = [
+            // kotlin
+            "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion",
+            "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutinesVersion",
+            "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:$kotlinSerializationVersion",
+            "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$kotlinSerializationVersion",
+            // grpc
+            "io.grpc:grpc-netty:$grpcVersion",
+            "io.grpc:grpc-stub:$grpcVersion",
+            "io.grpc:grpc-all:$grpcVersion",
+            "io.grpc:grpc-protobuf:$grpcVersion",
+            "io.grpc:grpc-kotlin-stub:$grpcKotlinVersion",
+            // commons
+            "commons-io:commons-io:$commonsIoVersion",
+            "org.apache.commons:commons-lang3:$commonsLangVersion",
+            // slf4j
+            "org.slf4j:slf4j-api:$slf4jVersion",
+            "org.slf4j:slf4j-simple:$slf4jVersion",
+            // protobuf
+            "com.google.protobuf:protobuf-kotlin:$protobufVersion",
+            "com.google.protobuf:protobuf-java:$protobufVersion",
+            'io.grpc:grpc-kotlin-stub:1.3.0',
+            'io.grpc:protoc-gen-grpc-kotlin:1.3.0',
+            "org.mongodb:mongo-java-driver:3.12.11"
+    ]
+
+    def standalone = ["controller"]
+
+    dependencies {
+        if (standalone.contains(project.name)) {
+            api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        }
+
+        globalDependencies.forEach {
+            if (project.name == "controller")
+                api it else compileOnly it
+        }
+    }
+
+    compileKotlin {
+        kotlinOptions.javaParameters = true
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    shadowJar {
+        archiveClassifier.set("")
+        archiveFileName.set("mimic-${project.name}.jar")
+
+        mergeServiceFiles()
+    }
+
+    tasks.withType(Copy) {
+        filesMatching("**/*.proto") {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
+
+        filesMatching("**/*.yml") {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
+    }
+
+    def pluginDescription = "An AIO server core."
+
+    processResources {
+        from(sourceSets.main.resources.srcDirs) {
+            expand (
+                    "pluginVersion": "${version}",
+                    "pluginDescription": "$pluginDescription"
+            )
+
+            include "plugin.yml"
+        }
+    }
+
+    sourceSets.main {
+        java.srcDirs("build/generated/ksp/main/kotlin")
+    }
+
+    tasks.build.dependsOn(shadowJar)
+
+    buildscript {
+        repositories {
+            gradlePluginPortal()
+        }
+        dependencies {
+            classpath 'com.google.protobuf:protobuf-gradle-plugin:0.9.1'
+        }
+    }
+}

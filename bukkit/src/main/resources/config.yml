@@ -1,0 +1,19 @@
+##########################################
+#
+#  Mimic Plugin Configuration (config.yml)
+#
+##########################################
+
+# The controller/server ip and port to connect to.
+controller:
+  ip: "127.0.0.1"
+  port: 8080
+
+# The set of features to enable
+features:
+  # The value whether this feature is enabled or not
+  basic: true
+  disguise: true
+  mod-mode: true
+  security: true
+  warps: true

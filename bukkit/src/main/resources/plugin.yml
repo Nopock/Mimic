@@ -1,0 +1,5 @@
+name: Mimic
+main: org.hyrical.mimic.MimicClient
+version: 1.0
+api-version: 1.8
+author: Hyrical

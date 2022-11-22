@@ -1,0 +1,25 @@
+repositories {
+    maven {
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+
+    maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = "https://oss.sonatype.org/content/repositories/central" }
+}
+
+dependencies {
+    compileOnly "org.spigotmc:spigot:$spigotVersion"
+
+    api project(":protocol-stub")
+
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    implementation "co.aikar:acf-bukkit:0.5.1-SNAPSHOT"
+}
+
+shadowJar {
+    def internal = "org.hyrical.mimic.internal."
+    relocate "io.netty", "${internal}netty"
+    relocate "com.google.common", "${internal}google"
+}

@@ -1,0 +1,18 @@
+plugins {
+    id "application"
+}
+
+dependencies {
+    api project(":protocol-stub")
+    api project(":store")
+
+    api "com.github.Revxrsal.Lamp:cli:$lampVersion"
+    api "com.github.Revxrsal.Lamp:common:$lampVersion"
+
+    implementation "org.pf4j:pf4j:$pf4jVersion"
+    kapt "org.pf4j:pf4j:$pf4jVersion"
+}
+
+application {
+    mainClassName "org.hyrical.mimic.MimicControllerKt"
+}

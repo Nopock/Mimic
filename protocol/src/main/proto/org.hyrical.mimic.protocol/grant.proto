@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package org.hyrical.mimic.protocol;
+
+option java_package = "org.hyrical.mimic.protocol";
+option java_outer_classname = "GrantProtocol";
+option java_multiple_files = true;
+
+message Grant {
+  string id = 1;
+  string addedTo = 2;
+  string addedBy = 3;
+  string addedReason = 4;
+  uint64 addedAt = 5;
+  uint64 duration = 6;
+  string rank = 7;
+  string removedBy = 8;
+  string removedReason = 9;
+  uint64 removedAt = 10;
+}
+
+message GrantsResponse {
+  repeated Grant grants = 1;
+}

@@ -1,6 +1,29 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+/target/
+dependency-reduced-pom.xml
+
+# Java
+#*.jar
+
+# JRebel
+rebel.xml
+
+# Keep libs
+#!lib/*.jar
+
 .gradle
-/build/
-/.idea/
+**/build/
+!src/**/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting

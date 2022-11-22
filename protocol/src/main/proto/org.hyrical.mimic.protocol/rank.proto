@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package org.hyrical.mimic.protocol;
+
+option java_package = "org.hyrical.mimic.protocol";
+option java_outer_classname = "RankProtocol";
+option java_multiple_files = true;
+
+import "org.hyrical.mimic.protocol/util.proto";
+
+message Rank {
+  string id = 1;
+  string name = 2;
+  string displayName = 3;
+  int32 weight = 4;
+  string prefix = 5;
+  string suffix = 6;
+  string color = 7;
+  bool defaultRank = 8;
+  bool staffRank = 9;
+  repeated string permissions = 10;
+  repeated string parents = 11;
+}
+
+service RankService {
+  rpc GetRank (RankRequestById) returns (Rank) {}
+  rpc RankByName (RankRequestByName) returns (Rank) {}
+  rpc Ranks (Empty) returns (RanksResponse) {}
+  rpc CreateRank (Rank) returns (Rank) {}
+  rpc UpdateRank (Rank) returns (Rank) {}
+  rpc DeleteRank (Rank) returns (Rank) {}
+}
+
+message RankRequestById {
+  string id = 1;
+}
+
+message RankRequestByName {
+  string name = 1;
+}
+
+message RanksResponse {
+  repeated Rank ranks = 1;
+}

@@ -1,0 +1,11 @@
+rootProject.name = "mimic"
+
+include(
+        "protocol",
+        "protocol-stub",
+        "controller",
+        "commons"
+)
+
+include("bukkit")
+include("store")

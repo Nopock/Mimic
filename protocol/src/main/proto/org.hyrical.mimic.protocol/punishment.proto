@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package org.hyrical.mimic.protocol;
+
+option java_package = "org.hyrical.mimic.protocol";
+option java_outer_classname = "PunishmentProtocol";
+option java_multiple_files = true;
+
+message Punishment {
+    enum PunishmentType {
+        BAN = 0;
+        MUTE = 1;
+        KICK = 2;
+        WARN = 3;
+    }
+
+    string id = 1;
+    string addedTo = 2;
+    string addedBy = 3;
+    string addedReason = 4;
+    uint64 addedAt = 5;
+    uint64 duration = 6;
+    PunishmentType type = 7;
+    string removedBy = 8;
+    string removedReason = 9;
+    uint64 removedAt = 10;
+}
+
+message PunishmentTypeRequest {
+    Punishment.PunishmentType type = 1;
+    string uuid = 2;
+    optional string username = 3;
+    optional bool active = 4;
+}
+
+message PunishmentsResponse {
+    repeated Punishment punishments = 1;
+}

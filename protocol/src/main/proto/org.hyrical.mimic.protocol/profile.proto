@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package org.hyrical.mimic.protocol;
+
+option java_package = "org.hyrical.mimic.protocol";
+option java_outer_classname = "ProfileProtocol";
+option java_multiple_files = true;
+
+import "org.hyrical.mimic.protocol/grant.proto";
+import "org.hyrical.mimic.protocol/util.proto";
+import "org.hyrical.mimic.protocol/punishment.proto";
+
+service ProfileService {
+  rpc GetProfile (ProfileRequest) returns (Profile) {}
+  rpc CreateProfile (ProfileRequest) returns (Profile) {}
+  rpc AllProfiles (Empty) returns (ProfilesResponse) {}
+  rpc GrantUser(Grant) returns (SuccessResponse) {}
+  rpc Grants(ProfileRequest) returns (GrantsResponse) {}
+  rpc DeleteGrant(Grant) returns (SuccessResponse) {}
+  rpc Punish(Punishment) returns (SuccessResponse) {}
+  rpc Punishments(ProfileRequest) returns (PunishmentsResponse) {}
+  rpc DeletePunishment(Punishment) returns (SuccessResponse) {}
+  rpc PunishmentsByType(PunishmentTypeRequest) returns (PunishmentsResponse) {}
+  rpc AllPunishments(ProfileRequest) returns (stream Punishment) {}
+}
+
+message ProfileRequest {
+  string uuid = 1;
+  optional string username = 2;
+}
+
+message Profile {
+  string uuid = 1;
+  string username = 2;
+  uint64 createdAt = 3;
+  uint64 lastLogin = 4;
+  bool online = 5;
+  repeated string permissions = 6;
+  string prefix = 7;
+}
+
+message ProfilesRequest {
+  repeated string uuids = 1;
+}
+
+message ProfilesResponse {
+  repeated Profile profiles = 1;
+}

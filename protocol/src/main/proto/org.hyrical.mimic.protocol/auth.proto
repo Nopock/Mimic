@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package org.hyrical.mimic.protocol;
+
+option java_package = "org.hyrical.mimic.protocol";
+option java_outer_classname = "AuthenticationProtocol";
+option java_multiple_files = true;
+
+message Authentication
+{
+  string token = 1;
+}
+
+enum AuthenticationStatus
+{
+  SUCCESS = 0;
+  FAILURE = 1;
+}
