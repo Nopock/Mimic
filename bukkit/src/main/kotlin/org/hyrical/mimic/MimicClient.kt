@@ -35,8 +35,7 @@ class MimicClient : JavaPlugin() {
 
         rankService = RankServiceGrpc.newBlockingStub(client)
 
-        getFeatures().forEach {
-            if (config.getBoolean("features.${it.key}")) {
+        getFeatures().forEach { if (config.getBoolean("features.${it.key}")) {
                 logger.log(LogRecord(Level.INFO, "Enabling feature ${it.key}"))
                 it.enable()
             }
@@ -45,9 +44,8 @@ class MimicClient : JavaPlugin() {
 
     override fun onDisable() {
         // Plugin shutdown logic
-        getFeatures().forEach {
-            it.onDisable()
-        }
+        getFeatures().forEach { it.onDisable() }
+
     }
 
     fun getFeatures(): List<Feature> {
